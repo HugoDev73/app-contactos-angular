@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseUrl: "https://my.api.mockaroo.com/sa/exercise",
+  apiKey: "7802c4c0",
 };
 
 /*

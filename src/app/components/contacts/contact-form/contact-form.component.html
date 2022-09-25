@@ -1,0 +1,256 @@
+<div class="crear-contacto mx-auto">
+  <!--  <h2>{{(data$ | async)?.contactLastName}}</h2> -->
+
+  <h3 class="text-center">
+    {{ isCreate ? "Registrar Contacto" : "Actualizar Contacto" }}
+  </h3>
+  <form
+    [formGroup]="createContact"
+    (ngSubmit)="onSubmit()"
+    class="shadow bg-white p-5"
+  >
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input
+            formControlName="contactFirstName"
+            type="text"
+            class="form-control"
+            id="contactFirstName"
+            placeholder="nombre"
+          />
+          <label for="contactFirstName" class="form-label">Firs Name</label>
+          <span
+            *ngIf="
+              !createContact.get('contactFirstName')!.valid &&
+              createContact.get('contactFirstName')!.touched
+            "
+            class="help-blok"
+            >Ingrese un nombre valido!
+          </span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input
+            formControlName="contactLastName"
+            type="text"
+            class="form-control"
+            id="contactLastName"
+            placeholder="Example input placeholder"
+          />
+          <label for="contactLastName" class="form-label">Last Name</label>
+          <span
+            *ngIf="
+              !createContact.get('contactLastName')!.valid &&
+              createContact.get('contactLastName')!.touched
+            "
+            class="help-blok"
+            >Ingrese un nombre valido!
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input
+            formControlName="contactAlias"
+            type="text"
+            class="form-control"
+            id="contactAlias"
+            placeholder="Example input placeholder"
+          />
+          <label for="contactAlias" class="form-label">Alias</label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input
+            formControlName="contactBirthday"
+            type="date"
+            class="form-control"
+            id="contactBirthday"
+            placeholder="Example input placeholder"
+          />
+          <label for="contactBirthday" class="form-label"
+            >Fecha de Cumpleaños</label
+          >
+        </div>
+      </div>
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        formControlName="contactCompany"
+        type="text"
+        class="form-control"
+        id="contactCompany"
+        placeholder="Example input placeholder"
+      />
+      <label for="contactCompany" class="form-label">Empresa</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <textarea
+        formControlName="contactNotes"
+        class="form-control"
+        placeholder="Notes"
+        id="contactNotes"
+      ></textarea>
+      <label for="contactNotes">Notes</label>
+    </div>
+
+    <div class="row foto">
+      <div class="col-md-6">
+        <div class="form-floating mb-3">
+          <input (change)="onSelectImage($event)" type="file" />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="img-preview">
+          <img class="img-user" [src]="urlImage" alt="" />
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- Construccion de emails -->
+  <div class="emails border p-2 mb-3 mt-3">
+    <div class="row">
+      <div class="col-md-8">
+        <p><i class="bi bi-envelope-open"></i> Email(s)</p>
+      </div>
+      <div class="col-md-4">
+        <button
+          (click)="createComponentEmail()"
+          type="button"
+          class="btn btn-primary"
+        >
+          Nuevo Email
+        </button>
+      </div>
+    </div>
+
+    <div class="control-email mb-3">
+      <ng-template appDynamicEmail></ng-template>
+    </div>
+    <div class="list-emails">
+      <div *ngFor="let email of listEmails" class="list-group">
+        <div class="list-group-item list-group-item-action">
+          <span
+            (click)="onRemoveEmail(email.emailValue)"
+            class="badge bg-danger cursor-pointer m-2"
+            ><i class="bi bi-trash"></i
+          ></span>
+          <a class="w-75 cursor-pointer" (click)="createComponentEmail(email.emailValue)">
+            {{ email.emailValue }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Construccion de Tags -->
+  <div class="tags border p-2 mb-3">
+    <div class="row">
+      <div class="col-md-4">
+        <p class="g-col-6"><i class="bi bi-envelope-open"></i> Tags</p>
+      </div>
+      <div class="col-md-8 d-flex">
+        <input [(ngModel)]="tag" type="text" />
+        <button (click)="onAddTag(tag)" type="button" class="btn btn-primary">
+          Add tag
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        Mis tags
+        <div class="mb-3">
+          <div class="content-tags" *ngFor="let tag of tags">
+            <div class="badge bg-light text-dark tag">
+              {{ tag.tagValue }}
+              <span
+                (click)="onRemoveTag(tag.tagValue)"
+                class="badge bg-danger cursor-pointer"
+                ><i class="bi bi-trash"></i
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <span>Seleccione</span>
+        <div class="mb-3">
+          <div class="d-flex flex-row" *ngFor="let tag of listTags">
+            <div
+              (click)="onAddMyTags(tag.tagValue)"
+              class="badge text-bg-success p-1 mb-1 cursor-pointer"
+            >
+              {{ tag.tagValue }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Construccion de Telefonos dinamicos -->
+  <div class="phones border p-2 mb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <p class="fw-bold">Agregar numeros de telefonos</p>
+      </div>
+      <div class="col-md-6">
+        <button
+          class="btn btn-primary"
+          (click)="createComponentPhone('phone')"
+          type="button"
+        >
+          Casa
+        </button>
+        <button
+          class="btn btn-danger"
+          (click)="createComponentPhone('mobile')"
+          type="button"
+        >
+          Mobile
+        </button>
+        <button
+          class="btn btn-success"
+          (click)="createComponentPhone('whatsapp')"
+          type="button"
+        >
+          Whatsapp
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <ng-template appDynamicPhone></ng-template>
+      </div>
+      <div class="col-md-6">
+        <ul *ngFor="let phone of listPhones">
+          <li>
+            <i [class]="phone.icon"></i> {{ phone.phoneValue }}
+            <span
+              (click)="createComponentPhone(phone.phoneType, phone.phoneValue)"
+              class="badge text-bg-primary cursor-pointer"
+              >Editar</span
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr class="mt-5" />
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <button (click)="onSubmit()" [disabled]="!createContact.valid" type="submit" class="btn btn-primary">
+        {{ isCreate ? 'Guardar' : 'Actualizar' }}
+      </button>
+    <!-- <button (click)="onSubmit()" class="btn btn-primary">
+      {{ isCreate ? "Guardar" : "Actualizar" }}
+    </button> -->
+  </div>
+</div>

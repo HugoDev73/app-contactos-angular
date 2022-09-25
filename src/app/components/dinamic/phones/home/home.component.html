@@ -1,0 +1,21 @@
+<div class="row">
+  <form [formGroup]="formHome" novalidate>
+    <div class="input-group flex-nowrap mr-2">
+      <span class="input-group-text" id="addon-wrapping">
+          <i [class]="data.icon"></i>
+      </span>
+      <input
+        formControlName="controlNumber"
+        type="text"
+        class="form-control"
+        placeholder="telefono de casa"
+        aria-describedby="addon-wrapping"
+      />
+    </div>
+    <div *ngIf="!formHome.get('controlNumber')!.valid && formHome.get('controlNumber')!.touched">
+      Numero requerido
+      <!-- <span *ngIf="formHome.get('controlNumber')"></span> -->
+    </div>
+    <button (click)="onSaveNumber()" class="btn btn-primary" type="submit"><i class="bi bi-plus-lg"></i></button>
+  </form>
+</div>

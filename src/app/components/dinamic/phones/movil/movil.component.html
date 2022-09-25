@@ -1,0 +1,8 @@
+<div class="input-group">
+  <span class="input-group-text">
+    <i [class]="data.icon"></i>
+  </span>
+  <input [(ngModel)]='lada' type="text" placeholder="lada" class="form-control" />
+  <input [(ngModel)]='number' type="text" placeholder="numero" class="form-control" />
+  <button (click)="onSaveNumber()" class="btn btn-primary" type="button"><i class="bi bi-plus-lg"></i></button>
+</div>

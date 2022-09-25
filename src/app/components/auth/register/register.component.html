@@ -1,0 +1,70 @@
+<div class="crear-contacto mx-auto">
+    <h3 class="text-center">Login</h3>
+    <form
+      [formGroup]="createUser"
+      (ngSubmit)="onSubmit()"
+      class="shadow bg-white p-5 rounded-lg"
+    >
+      <div class="form-floating mb-3">
+        <input
+        formControlName="userFullName"
+          type="text"
+          class="form-control"
+          id="userFullName"
+          placeholder="name@example.com"
+        />
+        <label for="userFullName">User Full Name</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+        formControlName="userName"
+          type="text"
+          class="form-control"
+          id="userName"
+          placeholder="name@example.com"
+        />
+        <label for="userName">User Name</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+        formControlName="userPassword"
+          type="password"
+          class="form-control"
+          id="password"
+          placeholder="Password"
+        />
+        <label for="password">Password</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+        formControlName="userEmail"
+          type="email"
+          class="form-control"
+          id="userEmail"
+          placeholder="name@example.com"
+        />
+        <label for="userEmail">Email</label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+        formControlName="userPhoto"
+          type="email"
+          class="form-control"
+          id="userPhoto"
+          placeholder="name@example.com"
+        />
+        <label for="userPhoto">Foto</label>
+      </div>
+      
+  
+      <div class="col-12">
+        <button [disabled]="!createUser.valid" type="submit" class="btn btn-primary">Login</button>
+      </div>
+      
+    </form>
+  </div>
+  

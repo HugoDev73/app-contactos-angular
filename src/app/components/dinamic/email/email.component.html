@@ -1,0 +1,24 @@
+<form [formGroup]="formEmail" novalidate  class="row mt-3">
+    <div class="col-md-8">
+        <div class="form-floating mb-3">
+          <input
+          formControlName="controlEmail"
+            type="email"
+            class="form-control"
+            id="floatingInput"
+            placeholder="name@example.com"
+          />
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div *ngIf="!formEmail.get('controlEmail')!.valid && formEmail.get('controlEmail')!.touched">
+            Numero requerido o  no valido
+            <!-- <span *ngIf="formEmail.get('controlEmail')!.errors['required']"></span> -->
+          </div>
+      </div>
+      <div class="col-md-4">
+        <button (click)="onSaveEmail()" class="btn btn-primary" type="button">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+</form>
+

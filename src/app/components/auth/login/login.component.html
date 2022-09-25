@@ -1,0 +1,35 @@
+<div class="crear-contacto container mx-auto">
+  <h3 class="text-center">Login</h3>
+  <form
+    [formGroup]="signupForm"
+    (ngSubmit)="onSubmit()"
+    class="shadow bg-white p-5 rounded-lg"
+  >
+    <div class="form-floating mb-3">
+      <input
+        formControlName="authUser"
+        type="text"
+        class="form-control"
+        id="user"
+        placeholder="name@example.com"
+      />
+      <label for="user">User</label>
+    </div>
+    <div class="form-floating mb-3">
+      <input
+        formControlName="authPassword"
+        type="password"
+        class="form-control"
+        id="password"
+        placeholder="Password"
+      />
+      <label for="password">Password</label>
+    </div>
+    
+
+    <div class="col-12">
+      <button [disabled]="!signupForm.valid" type="submit" class="btn btn-primary">Login</button>
+    </div>
+    
+  </form>
+</div>

@@ -1,0 +1,12 @@
+<div class="input-group mb-3">
+  <span class="input-group-text">
+    <i [class]="data.icon"></i>
+  </span>
+  <span class="input-group-text">+52</span>
+  <input
+  [(ngModel)]='number'
+    type="number"
+    class="form-control"
+  />
+  <button (click)="onSaveNumber()" class="btn btn-primary" type="button"><i class="bi bi-plus-lg"></i></button>
+</div>
