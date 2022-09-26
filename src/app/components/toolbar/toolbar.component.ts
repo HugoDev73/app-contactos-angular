@@ -25,7 +25,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _dataStorage: DataStorageService) { }
 
   ngOnInit(): void {
-    //this.onGetUser(12);
+    this.onGetUser(12);
     this.getTotalContacts();
   }
  
