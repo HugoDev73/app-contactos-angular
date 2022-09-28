@@ -24,16 +24,20 @@ export class HomeComponent implements OnInit, InputPhone {
 
   createForm() {
     this.formHome = this.fb.group({
-      controlNumber: [this.number, [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
+      //controlNumber: [this.number, [Validators.required, Validators.minLength(3), Validators.maxLength(3)]]
+      controlNumber: [this.number, [Validators.required, Validators.pattern(/^\D*\d{7}$/)]]
     });
   }
 
   onSaveNumber() {
     const phoneValue = this.formHome.value.controlNumber
-
-    if(this.formHome.valid){}
+    console.log(this.formHome);
+    
+    if(this.formHome.valid){
+      this.phone.emit(phoneValue);
+    }
     //const phoneValue = (this.number).toString()
-    this.phone.emit(phoneValue);
+    
   }
 
 }

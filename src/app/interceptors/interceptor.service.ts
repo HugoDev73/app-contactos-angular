@@ -4,9 +4,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { Response, ResponseApi } from '../models/response.model';
+import { ResponseApi } from '../models/response.model';
 import { SpinnerService } from '../services/spinner.service';
 import { Router } from '@angular/router';
+import { ResponseType } from '../components/enums/response.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -33,13 +34,13 @@ export class InterceptorService implements HttpInterceptor {
           const statusCode = body.statusCode;
           let message = body.friendlyMessage;
           switch (statusCode) {
-            case 200:
+            case ResponseType.Ok:
               this.successMessage(message);
               break;
-            case 400:
+            case ResponseType.BadRequest:
               this.errorMessage(message);
               break;
-            case 401:
+            case ResponseType.Unauthorized:
               this.errorMessage(message);
               //this.router.navigate(['login']);
               break;

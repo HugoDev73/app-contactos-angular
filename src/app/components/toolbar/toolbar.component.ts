@@ -16,7 +16,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   title:string = "Agenda";
   closeResult = '';
   user!:User;
-  totalContacts:number = 0
+ 
   constructor(private router: Router,
     private route: ActivatedRoute, 
     private offcanvasService: NgbOffcanvas, 
@@ -24,9 +24,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _dataStorage: DataStorageService) { }
 
+    listLocal$ = this._dataStorage.listLocal$;
+
   ngOnInit(): void {
     this.onGetUser(12);
-    this.getTotalContacts();
   }
  
 
@@ -78,9 +79,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     console.log(user);
   }
 
-  getTotalContacts(){
-    this._dataStorage.getTotalContacts().subscribe(data => this.totalContacts = data)
-  }
 
   ngOnDestroy(): void {
     

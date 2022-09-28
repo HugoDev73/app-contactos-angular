@@ -5,7 +5,7 @@
     </button>
     <a class="navbar-brand" href="#">{{ title }}</a>
     <button type="button" class="btn btn-primary">
-      Contactos <span class="badge bg-danger">{{totalContacts}}</span>
+      Contactos <span class="badge bg-danger">{{ (listLocal$ | async)?.length }}</span>
     </button>
   </div>
   <ng-template #content let-offcanvas>
@@ -21,9 +21,9 @@
     <div class="offcanvas-body">
       <div class="card" style="width: 18rem">
         <img
-        (click)="onEditProfile(user)"
+        (click)="onEditProfile(user)" (click)="offcanvas.close('Save click')"
           [attr.src]="user.userPhoto"
-          class="rounded mx-auto d-block"
+          class="rounded mx-auto d-block cursor-pointer"
           alt=""
           style="width: 100px"
         />

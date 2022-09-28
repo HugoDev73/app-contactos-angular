@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
+import { ResponseType } from '../../enums/response.enum';
 
 @Component({
   selector: 'app-user-list',
@@ -18,8 +19,6 @@ export class UserListComponent implements OnInit {
   userList!: User[];
   successMessage = '';
   showMessage: boolean = false;
-
-  @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
   page = 1;
   pageSize = 10;
@@ -57,10 +56,7 @@ export class UserListComponent implements OnInit {
 
   onDeleteUser(id: number) {
     this._userService.deleteUser(id).subscribe(data => {
-      this.showMessage = true;
-      this.successMessage = data.friendlyMessage;
-      setTimeout(() => this.selfClosingAlert.close(), 3000);
-      console.log(data)
+      if(data.statusCode == ResponseType.Ok){}
     })
 
   }

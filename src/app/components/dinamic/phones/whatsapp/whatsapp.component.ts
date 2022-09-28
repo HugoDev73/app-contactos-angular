@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InputPhone } from '../../../../models/enumPhone';
 
 @Component({
@@ -10,17 +11,40 @@ export class WhatsappComponent implements OnInit, InputPhone {
 data: any;
   lada: string = ""
   number: string = ""
+  formWhatsapp!: FormGroup;
 @Output() phone = new EventEmitter<string>();
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.number = this.data.number;
+    if (this.data.number != undefined) {
+      this.lada = this.data.number.substr(0, 3);
+      this.number = this.data.number.substr(3);
+    }
+    this.createForm();
+  }
+
+  createForm() {
+    this.formWhatsapp = this.fb.group({
+      controlLada: [
+        this.lada,
+        [Validators.required, Validators.pattern(/^\D*\d{3}$/)],
+      ],
+      controlNumber: [
+        this.number,
+        [Validators.required, Validators.pattern(/^\D*\d{7}$/)],
+      ],
+    });
   }
 
   onSaveNumber() {
-    const numberPhone = (this.number).toString()
-    this.phone.emit(numberPhone);
-  
+    console.log(this.formWhatsapp);
+    const {controlNumber, controlLada}  = this.formWhatsapp.value;
+    console.log(controlNumber.toString() + controlLada.toString());
+    const phoneValue = controlLada.toString() + controlNumber.toString();
+    if (this.formWhatsapp.valid) {
+      this.phone.emit(phoneValue);
+    }
   }
+  
 
 }

@@ -1,5 +1,5 @@
 export class Phone{
-    public phoneId!:number;
+    public phoneId?:number;
     public phoneValue:string;
     public phoneType:string;
     public icon!:string;

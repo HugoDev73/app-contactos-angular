@@ -6,15 +6,15 @@
       </span>
       <input
         formControlName="controlNumber"
-        type="text"
+        type="number"
         class="form-control"
         placeholder="telefono de casa"
         aria-describedby="addon-wrapping"
       />
     </div>
     <div *ngIf="!formHome.get('controlNumber')!.valid && formHome.get('controlNumber')!.touched">
-      Numero requerido
-      <!-- <span *ngIf="formHome.get('controlNumber')"></span> -->
+      <span *ngIf="formHome.get('controlNumber')?.errors?.['required']">El numero es requerido</span>
+      <span *ngIf="formHome.get('controlNumber')?.errors?.['pattern']">7 digitos obligatorio</span>
     </div>
     <button (click)="onSaveNumber()" class="btn btn-primary" type="submit"><i class="bi bi-plus-lg"></i></button>
   </form>

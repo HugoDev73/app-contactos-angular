@@ -31,7 +31,6 @@ export class ContactDetailComponent implements OnInit {
       this.emails = response.contactEmails;
       this.phones = response.contactPhones;
       this.tags = response.contactTags;
-      console.log(this.emails[0])
     })
   }
 

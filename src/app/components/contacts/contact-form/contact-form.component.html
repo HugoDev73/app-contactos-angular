@@ -5,7 +5,7 @@
     {{ isCreate ? "Registrar Contacto" : "Actualizar Contacto" }}
   </h3>
   <form
-    [formGroup]="createContact"
+    [formGroup]="formContact"
     (ngSubmit)="onSubmit()"
     class="shadow bg-white p-5"
   >
@@ -22,8 +22,8 @@
           <label for="contactFirstName" class="form-label">Firs Name</label>
           <span
             *ngIf="
-              !createContact.get('contactFirstName')!.valid &&
-              createContact.get('contactFirstName')!.touched
+              !formContact.get('contactFirstName')!.valid &&
+              formContact.get('contactFirstName')!.touched
             "
             class="help-blok"
             >Ingrese un nombre valido!
@@ -42,8 +42,8 @@
           <label for="contactLastName" class="form-label">Last Name</label>
           <span
             *ngIf="
-              !createContact.get('contactLastName')!.valid &&
-              createContact.get('contactLastName')!.touched
+              !formContact.get('contactLastName')!.valid &&
+              formContact.get('contactLastName')!.touched
             "
             class="help-blok"
             >Ingrese un nombre valido!
@@ -246,11 +246,8 @@
 
   <hr class="mt-5" />
   <div class="d-grid gap-2 col-6 mx-auto">
-    <button (click)="onSubmit()" [disabled]="!createContact.valid" type="submit" class="btn btn-primary">
+    <button (click)="onSubmit()" [disabled]="!formContact.valid" type="submit" class="btn btn-primary">
         {{ isCreate ? 'Guardar' : 'Actualizar' }}
       </button>
-    <!-- <button (click)="onSubmit()" class="btn btn-primary">
-      {{ isCreate ? "Guardar" : "Actualizar" }}
-    </button> -->
   </div>
 </div>

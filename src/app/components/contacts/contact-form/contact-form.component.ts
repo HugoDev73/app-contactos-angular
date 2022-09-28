@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 
 import { Contact } from 'src/app/models/contact.model';
@@ -16,14 +17,14 @@ import { MovilComponent } from '../../dinamic/phones/movil/movil.component';
 import { WhatsappComponent } from '../../dinamic/phones/whatsapp/whatsapp.component';
 import { DynamicEmailDirective } from '../../directives/dynamic-email.directive';
 import { DynamicPhoneDirective } from '../../directives/dynamic-phone.directive';
+import { ResponseType } from '../../enums/response.enum';
 
 @Component({
   selector: 'app-contact-form',
   templateUrl: './contact-form.component.html',
-  styleUrls: ['./contact-form.component.scss']
+  styleUrls: ['./contact-form.component.scss'],
 })
 export class ContactFormComponent implements OnInit {
-
   data$!: Observable<Contact>;
   isCreate: boolean = true;
 
@@ -32,26 +33,33 @@ export class ContactFormComponent implements OnInit {
   tags: Tag[] = [];
   phones!: Phone[];
 
-  tag: string = ''
+  tag: string = '';
 
   listContactsLocal: Contact[] = [];
   listTags: Tag[] = [];
   listPhones: Phone[] = [];
   listEmails: Email[] = [];
 
-  createContact!: FormGroup;
-  urlImage: string = "";
+  formContact!: FormGroup;
+  urlImage: string = '';
 
   isCreatePhone: boolean = true;
 
+  @ViewChild(DynamicPhoneDirective) dynamic!: DynamicPhoneDirective;
+  @ViewChild(DynamicEmailDirective) dynamicEmail!: DynamicEmailDirective;
 
-
-  @ViewChild(DynamicPhoneDirective) dynamic!: DynamicPhoneDirective
-  @ViewChild(DynamicEmailDirective) dynamicEmail!: DynamicEmailDirective
-
-  constructor(private _contactService: ContactService,
+  constructor(
+    private toastr: ToastrService,
+    private _contactService: ContactService,
     private router: Router,
-    private _dataStorage: DataStorageService) { }
+    private _dataStorage: DataStorageService,
+    private fb:FormBuilder
+
+  ) {
+    this.contact = history.state;
+    console.log(this.contact);
+    
+  }
 
   ngOnInit(): void {
     this.getStatusForm();
@@ -60,47 +68,75 @@ export class ContactFormComponent implements OnInit {
     this.onGetContactsLocal();
   }
 
+  errorMessage(message: any) {
+    this.toastr.error(message, 'Error');
+  }
+
   onGetTags() {
-    this._dataStorage.getTags().subscribe(data => this.listTags = data)
+    this.listTags = this._dataStorage.tags
+    //this._dataStorage.getTags().subscribe((data) => (this.listTags = data));
   }
 
   onGetContactsLocal() {
-    this._dataStorage.getContactsLocal().subscribe(data => this.listContactsLocal = data)
+    this._dataStorage
+      .getContactsLocal()
+      .subscribe((data) => (this.listContactsLocal = data));
   }
 
   getStatusForm() {
-    this._contactService.statusFormObservable.subscribe(data => this.isCreate = data)
+    this._contactService.statusFormObservable.subscribe(
+      (data) => (this.isCreate = data)
+    );
+  }
+
+  getContactData() {
+    this._contactService.contactObservable.subscribe((response: Contact) => {
+      this.contact = response;
+      this.listEmails = response.contactEmails;
+      this.tags = response.contactTags;
+      this.listPhones = response.contactPhones;
+    });
+  }
+
+  createFormContact(contact?: Contact) {
+    /* this.formContact = this.fb.group({
+      contactId: [!this.contact ? null : this.contact.contactId, Validators.required]
+    }) */
+    this.formContact = new FormGroup({
+      contactId: new FormControl(!this.contact ? null : this.contact.contactId),
+      contactFirstName: new FormControl(
+        !this.contact ? null : this.contact.contactFirstName!,
+        Validators.required
+      ),
+      contactLastName: new FormControl(
+        !this.contact ? null : this.contact.contactLastName!,
+        Validators.required
+      ),
+      contactCompany: new FormControl(
+        !this.contact ? null : this.contact.contactCompany!,
+        Validators.required
+      ),
+      contactBirthday: new FormControl(
+        !this.contact ? null : this.contact.contactBirthday!,
+        [Validators.required]
+      ),
+      contactNotes: new FormControl(
+        !this.contact ? null : this.contact.contactNotes!,
+        Validators.required
+      ),
+      contactAlias: new FormControl(
+        !this.contact ? null : this.contact.contactAlias!,
+        Validators.required
+      ),
+    });
   }
 
   onCreateForm() {
     if (this.isCreate) {
-      this.createContact = new FormGroup({
-        'contactId': new FormControl(1, Validators.required),
-        'contactFirstName': new FormControl(null, Validators.required),
-        'contactLastName': new FormControl(null, Validators.required),
-        'contactCompany': new FormControl(null, Validators.required),
-        'contactBirthday': new FormControl(null, [Validators.required,]),
-        'contactNotes': new FormControl(null, Validators.required),
-        'contactAlias': new FormControl(null, Validators.required)
-        /*        'contactEmails': new FormArray([]),
-               'contactTags': new FormArray([]) */
-      });
+      this.createFormContact();
     } else {
-      this._contactService.contactObservable.subscribe((response: Contact) => {
-        this.contact = response;
-        this.listEmails = response.contactEmails;
-        this.tags = response.contactTags;
-        this.listPhones = response.contactPhones;
-      })
-      this.createContact = new FormGroup({
-        'contactId': new FormControl(1, Validators.required),
-        'contactFirstName': new FormControl(this.contact.contactFirstName, Validators.required),
-        'contactLastName': new FormControl(this.contact.contactLastName, Validators.required),
-        'contactCompany': new FormControl(this.contact.contactCompany, Validators.required),
-        'contactBirthday': new FormControl(this.contact.contactBirthday, Validators.required),
-        'contactNotes': new FormControl(this.contact.contactNotes, Validators.required),
-        'contactAlias': new FormControl(this.contact.contactAlias, Validators.required)
-      });
+      this.getContactData();
+      this.createFormContact(this.contact);
     }
   }
 
@@ -108,43 +144,36 @@ export class ContactFormComponent implements OnInit {
   Logica emails  
   */
   createComponentEmail(value?: string) {
-    console.log(value)
-
-    var comp: any = this.getEmailComponent(value)
+    var comp: any = this.getEmailComponent(value);
     const viewContainerRef = this.dynamicEmail.viewContainerRef;
     viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent<InputEmail>(comp.Component);
+    const componentRef = viewContainerRef.createComponent<InputEmail>(
+      comp.Component
+    );
     componentRef.instance.data = comp.data;
-    if (value != undefined) {
-      componentRef.instance.emailOutput.subscribe((emailValue: string) => {
+    componentRef.instance.emailOutput.subscribe((emailValue: string) => {
+      if (value != undefined) {
         this.listEmails.map(function (item) {
-          if (item.emailValue == value) {
-            item.emailValue = emailValue;
-          }
+          if (item.emailValue == value) item.emailValue = emailValue;
         });
-      })
-    } else {
-      componentRef.instance.emailOutput.subscribe((emailValue: string) => {
-        const email: Email = { emailId: 0, emailValue: emailValue }
-        console.log(email)
-        this.listEmails.push(email)
-        console.log(this.listEmails);
-      })
-    }
+      } else {
+        const email: Email = { emailValue: emailValue };
+        this.listEmails.push(email);
+      }
+    });
   }
 
   getEmailComponent(value?: string): any {
     return {
       data: value,
-      Component: EmailComponent
-    }
+      Component: EmailComponent,
+    };
   }
 
   onRemoveEmail(emailValue: string) {
-    this.removeElementEmail(this.listEmails, emailValue)
+    this.removeElementEmail(this.listEmails, emailValue);
     console.log(this.listEmails);
   }
-
 
   removeElementEmail(arr: Email[], element: string) {
     arr.forEach((value, index) => {
@@ -155,28 +184,44 @@ export class ContactFormComponent implements OnInit {
   /* 
   Logica Tags  
   */
+  tagExists(value: string, tags: Tag[]): boolean {
+    const index = tags.findIndex(it => it.tagValue == value);
+    if(index >= 0){
+      this.errorMessage(`Ya existe "${value}": Ingrese uno diferente`);
+      return true;
+    }
+   /*  for (var i = 0; i < tags.length; i++) {
+      if (tags[i].tagValue == value) {
+        this.errorMessage(`Ya existe "${value}": Ingrese uno diferente`);
+        return true;
+      }
+    } */
+    return false;
+  }
+
   onAddTag(valueTag: string) {
+    const tag: Tag = { tagValue: valueTag };
     if (valueTag != '') {
-      const tag: Tag = { tagValue: valueTag }
-      this.listTags = this.listTags || [];
-      this.listTags.push(tag)
-      this._dataStorage.addTag(this.listTags)
+      if (!this.tagExists(valueTag, this.listTags)) {
+        this.listTags = this.listTags || [];
+        this.listTags.push(tag);
+        this._dataStorage.addTag(this.listTags);
+      }
     } else {
-      console.log('Ingrese texto');
+      this.errorMessage('Ingrese nombre de tag');
     }
   }
 
   onAddMyTags(valueTag: string) {
-    const tag: Tag = { tagValue: valueTag }
-    this.tags.push(tag)
-    console.log(this.tags)
+    const tag: Tag = { tagValue: valueTag };
+    if (!this.tagExists(valueTag, this.tags)) {
+      this.tags.push(tag);
+    }
   }
 
   onRemoveTag(valueTag: string) {
-    const tag: Tag = { tagValue: valueTag }
-    this.removeElement(this.tags, valueTag)
-    console.log(this.tags);
-
+    const tag: Tag = { tagValue: valueTag };
+    this.removeElement(this.tags, valueTag);
   }
 
   removeElement(arr: Tag[], element: string) {
@@ -185,40 +230,38 @@ export class ContactFormComponent implements OnInit {
     });
   }
 
-
-
   /* 
   generate dynamic phones
   */
-  phoneType: string = ''
+  phoneType: string = '';
   createComponentPhone(type: string, value?: string) {
-    console.log(type)
+    console.log(type);
     this.phoneType = type;
-    var objectType: any = this.getObjectType(this.phoneType, value)
+    var objectType: any = this.getObjectType(this.phoneType, value);
     const viewContainerRef = this.dynamic.viewContainerRef;
     viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent<InputPhone>(objectType.Component);
+    const componentRef = viewContainerRef.createComponent<InputPhone>(
+      objectType.Component
+    );
     componentRef.instance.data = objectType.data;
 
-    if (value != undefined) {
-      componentRef.instance.phone.subscribe((phoneValue: string) => {
-        //const number: Phone = { phoneId: 0, phoneValue: phoneValue, phoneType: this.phoneType, icon: objectType.data.icon }
+    componentRef.instance.phone.subscribe((phoneValue: string) => {
+      if (value != undefined) {
         this.listPhones.map(function (item) {
           if (item.phoneValue == value) {
             item.phoneValue = phoneValue;
-            item.icon = objectType.data.icon
+            item.icon = objectType.data.icon;
           }
         });
-      })
-    } else {
-      componentRef.instance.phone.subscribe((phoneValue: string) => {
-        const number: Phone = { phoneId: 0, phoneValue: phoneValue, phoneType: this.phoneType, icon: objectType.data.icon }
-        console.log(number)
-        this.listPhones.push(number)
-        console.log(this.listPhones);
-      })
-    }
-
+      } else {
+        const number: Phone = {
+          phoneValue: phoneValue,
+          phoneType: this.phoneType,
+          icon: objectType.data.icon,
+        };
+        this.listPhones.push(number);
+      }
+    });
   }
 
   getObjectType(type: string, value?: string): any {
@@ -226,105 +269,85 @@ export class ContactFormComponent implements OnInit {
       case TypePhone.Home:
         return {
           data: { icon: 'bi bi-house', number: value },
-          Component: HomeComponent
-        }
+          Component: HomeComponent,
+        };
       case TypePhone.Mobile:
         return {
           data: { icon: 'bi bi-phone', number: value },
-          Component: MovilComponent
-        }
+          Component: MovilComponent,
+        };
       case TypePhone.Whatsapp:
         return {
           data: { icon: 'bi bi-whatsapp', number: value },
-          Component: WhatsappComponent
-        }
+          Component: WhatsappComponent,
+        };
     }
   }
 
   onEditPhone(phone: Phone) {
-    //this.phoneType = phone.phoneType;
-    console.log(phone.phoneType);
-    this.createComponentPhone(phone.phoneType)
-    /* this.listPhones.map((item) => {
-      if (item.phoneValue == phone.phoneValue) {
-
-      }
-    }) */
-
+    this.createComponentPhone(phone.phoneType);
   }
 
+  getContact(): Contact {
+    const contact: Contact = this.formContact.value;
+    contact.contactPhoto = this.urlImage;
+    contact.contactEmails = this.listEmails;
+    contact.contactTags = this.tags;
+    contact.contactPhones = this.listPhones;
+    return contact;
+  }
 
+  saveContact() {
+    const contactItem = this.getContact();
+    this.listContactsLocal = this.listContactsLocal || [];
+    this._contactService.createContact(contactItem).subscribe((data) => {
+      if (data.statusCode == ResponseType.Ok) {
+        this.listContactsLocal.push(contactItem);
+        this._dataStorage.addContactLocal(contactItem);
+      }
+    });
+  }
+
+  updateContact() {
+    const contactItem = this.getContact();
+    this._contactService.updateContact(contactItem).subscribe((data) => {
+      if (data.statusCode == ResponseType.Ok) {
+        this.router.navigate(['admin/contacts']);
+      }
+    });
+  }
 
   /* 
   Enviar formulario 
   */
   onSubmit() {
-    console.log(this.createContact)
-    const contact = this.createContact.value;
-    const {
-      contactId,
-      contactFirstName,
-      contactLastName,
-      contactCompany,
-      contactBirthday,
-      contactNotes,
-      contactAlias,
-    } = contact;
+    console.log(this.formContact);
 
-    var contactItem: Contact = {
-      contactId: contactId,
-      contactFirstName: contactFirstName,
-      contactLastName: contactLastName,
-      contactCompany: contactCompany,
-      contactBirthday: contactBirthday,
-      contactNotes: contactNotes,
-      contactAlias: contactAlias,
-      contactPhoto: this.urlImage,
-      contactEmails: this.listEmails,
-      contactTags: this.tags,
-      contactPhones: this.listPhones
-    }
-    console.log(contactItem)
-
-    if (this.createContact.valid) {
+    if (this.formContact.valid) {
       if (this.isCreate) {
-        this.listContactsLocal = this.listContactsLocal || [];
-        this.listContactsLocal.push(contactItem);
-        this._dataStorage.addContactLocal(this.listContactsLocal);
-        this._contactService.createContact(contactItem).subscribe(data => {
-          console.log(data)
-        })
+        this.saveContact();
+        this._dataStorage.increaseCounter();
       } else {
-        this._contactService.updateContact(contactItem).subscribe(data => {
-          console.log(data)
-          if (data.statusCode == 400) {
-            this.router.navigate(['admin/contacts/edit']);
-          }
-
-        })
+        this.updateContact();
       }
       this.router.navigate(['admin/contacts']);
     } else {
-      console.log("Llene los campos");
+      console.log('Llene los campos');
     }
-
-
   }
 
   onSelectImage(e: any) {
-    console.log(e)
+    console.log(e);
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
-
     if (e.target.files) {
       let reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
       reader.onload = (event: any) => {
         this.urlImage = event.target.result;
         console.log(this.urlImage);
-      }
+      };
     }
   }
-
 }

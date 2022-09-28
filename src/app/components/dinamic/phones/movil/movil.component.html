@@ -1,8 +1,19 @@
-<div class="input-group">
-  <span class="input-group-text">
-    <i [class]="data.icon"></i>
-  </span>
-  <input [(ngModel)]='lada' type="text" placeholder="lada" class="form-control" />
-  <input [(ngModel)]='number' type="text" placeholder="numero" class="form-control" />
-  <button (click)="onSaveNumber()" class="btn btn-primary" type="button"><i class="bi bi-plus-lg"></i></button>
-</div>
+<form [formGroup]="formMovil">
+  <div class="input-group">
+    <span class="input-group-text">
+      <i [class]="data.icon"></i>
+    </span>
+    <input formControlName="controlLada" type="number" placeholder="lada" class="form-control" />
+    <input formControlName="controlNumber" type="number" placeholder="numero" class="form-control" />
+    <button (click)="onSaveNumber()" class="btn btn-primary" type="button"><i class="bi bi-plus-lg"></i></button>
+  </div>
+  <div *ngIf="!formMovil.get('controlLada')!.valid && formMovil.get('controlLada')!.touched">
+    <span *ngIf="formMovil.get('controlLada')?.errors?.['required']">Campo lada es requerido</span>
+    <span *ngIf="formMovil.get('controlLada')?.errors?.['pattern']">Lada debe tener 3 digitos</span>
+  </div>
+  <div *ngIf="!formMovil.get('controlNumber')!.valid && formMovil.get('controlNumber')!.touched">
+    <span *ngIf="formMovil.get('controlNumber')?.errors?.['required']">El numero es es requerido</span>
+    <span *ngIf="formMovil.get('controlNumber')?.errors?.['pattern']">Número debe tener 7 digitos</span>
+  </div>
+</form>
+

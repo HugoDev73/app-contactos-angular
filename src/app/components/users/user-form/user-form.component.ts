@@ -58,9 +58,10 @@ export class UserFormComponent implements OnInit {
   }
 
   onSubmit() {
-    const user = this.createUser.value;
-    console.log(user)
-
+    const user:User = this.createUser.value;
+    user.userPhoto = this.urlImage;
+    console.log(user);
+    
     if (this.createUser.valid) {
       if(this.isCreate){
         this._userService.createUser(user).subscribe(data => {
@@ -78,19 +79,20 @@ export class UserFormComponent implements OnInit {
 
   }
   
+
   onSelectImage(e: any) {
-    console.log(e)
+    console.log(e);
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.readAsDataURL(file);
-  
-    if(e.target.files){
+    if (e.target.files) {
       let reader = new FileReader();
       reader.readAsDataURL(e.target.files[0]);
-      reader.onload=(event:any) => {
+      reader.onload = (event: any) => {
         this.urlImage = event.target.result;
-      }
-    } 
+        console.log(this.urlImage);
+      };
+    }
   }
 
   /* onSubmit(){

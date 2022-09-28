@@ -20,7 +20,7 @@ import { AuthComponent } from './pages/auth/auth.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { ContactsModule } from './pages/contacts/contacts.module';
 import { ComponentModule } from './components/component.module';
-import { DynamicPhoneDirective } from './directives/dynamic-phone.directive';
+
 
 
 @NgModule({
@@ -32,7 +32,7 @@ import { DynamicPhoneDirective } from './directives/dynamic-phone.directive';
     ToolbarComponent,
     AuthComponent,
     AdminComponent,
-    DynamicPhoneDirective
+
   ],
   imports: [
     BrowserModule,

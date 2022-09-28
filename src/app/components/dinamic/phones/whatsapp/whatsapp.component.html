@@ -1,12 +1,22 @@
-<div class="input-group mb-3">
-  <span class="input-group-text">
-    <i [class]="data.icon"></i>
-  </span>
-  <span class="input-group-text">+52</span>
-  <input
-  [(ngModel)]='number'
-    type="number"
-    class="form-control"
-  />
-  <button (click)="onSaveNumber()" class="btn btn-primary" type="button"><i class="bi bi-plus-lg"></i></button>
-</div>
+<form [formGroup]="formWhatsapp">
+  <div class="input-group">
+    <span class="input-group-text">
+      <i [class]="data.icon"></i>
+    </span>
+    <span class="input-group-text">
+      +52
+    </span>
+    <input formControlName="controlLada" type="number" placeholder="lada" class="form-control" />
+    <input formControlName="controlNumber" type="number" placeholder="numero" class="form-control" />
+    <button (click)="onSaveNumber()" class="btn btn-primary" type="button"><i class="bi bi-plus-lg"></i></button>
+  </div>
+  <div *ngIf="!formWhatsapp.get('controlLada')!.valid && formWhatsapp.get('controlLada')!.touched">
+    <span *ngIf="formWhatsapp.get('controlLada')?.errors?.['required']">Campo lada es requerido</span>
+    <span *ngIf="formWhatsapp.get('controlLada')?.errors?.['pattern']">Lada debe tener 3 digitos</span>
+  </div>
+  <div *ngIf="!formWhatsapp.get('controlNumber')!.valid && formWhatsapp.get('controlNumber')!.touched">
+    <span *ngIf="formWhatsapp.get('controlNumber')?.errors?.['required']">El numero es es requerido</span>
+    <span *ngIf="formWhatsapp.get('controlNumber')?.errors?.['pattern']">Número debe tener 7 digitos</span>
+  </div>
+</form>
+
