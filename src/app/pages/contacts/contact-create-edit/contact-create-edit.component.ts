@@ -4,27 +4,31 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 
+import { DynamicEmailDirective } from 'src/app/directives/dynamic-email.directive';
+import { DynamicPhoneDirective } from 'src/app/directives/dynamic-phone.directive';
+
+import { EmailComponent } from 'src/app/components/dinamic/email/email.component';
+import { HomeComponent } from 'src/app/components/dinamic/phones/home/home.component';
+import { MovilComponent } from 'src/app/components/dinamic/phones/movil/movil.component';
+import { WhatsappComponent } from 'src/app/components/dinamic/phones/whatsapp/whatsapp.component';
+
+
+import { ResponseType } from 'src/app/enums/response.enum';
 import { Contact } from 'src/app/models/contact.model';
 import { Email, InputEmail } from 'src/app/models/email.model';
-import { TypePhone, InputPhone } from 'src/app/models/enumPhone';
+import { InputPhone, TypePhone } from 'src/app/models/enumPhone';
 import { Phone } from 'src/app/models/phone.model';
 import { Tag } from 'src/app/models/tag.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { DataStorageService } from 'src/app/services/data-storage.service';
-import { EmailComponent } from '../../dinamic/email/email.component';
-import { HomeComponent } from '../../dinamic/phones/home/home.component';
-import { MovilComponent } from '../../dinamic/phones/movil/movil.component';
-import { WhatsappComponent } from '../../dinamic/phones/whatsapp/whatsapp.component';
-import { DynamicEmailDirective } from '../../directives/dynamic-email.directive';
-import { DynamicPhoneDirective } from '../../directives/dynamic-phone.directive';
-import { ResponseType } from '../../enums/response.enum';
 
 @Component({
-  selector: 'app-contact-form',
-  templateUrl: './contact-form.component.html',
-  styleUrls: ['./contact-form.component.scss'],
+  selector: 'app-contact-create-edit',
+  templateUrl: './contact-create-edit.component.html',
+  styleUrls: ['./contact-create-edit.component.scss']
 })
-export class ContactFormComponent implements OnInit {
+export class ContactCreateEditComponent implements OnInit {
+
   data$!: Observable<Contact>;
   isCreate: boolean = true;
 
@@ -312,7 +316,7 @@ export class ContactFormComponent implements OnInit {
     const contactItem = this.getContact();
     this._contactService.updateContact(contactItem).subscribe((data) => {
       if (data.statusCode == ResponseType.Ok) {
-        this.router.navigate(['admin/contacts']);
+        this.router.navigate(['contacts']);
       }
     });
   }
@@ -321,8 +325,7 @@ export class ContactFormComponent implements OnInit {
   Enviar formulario 
   */
   onSubmit() {
-    console.log(this.formContact);
-
+    //console.log(this.formContact);
     if (this.formContact.valid) {
       if (this.isCreate) {
         this.saveContact();
@@ -330,7 +333,7 @@ export class ContactFormComponent implements OnInit {
       } else {
         this.updateContact();
       }
-      this.router.navigate(['admin/contacts']);
+      this.router.navigate(['contacts']);
     } else {
       console.log('Llene los campos');
     }
@@ -350,4 +353,5 @@ export class ContactFormComponent implements OnInit {
       };
     }
   }
+
 }

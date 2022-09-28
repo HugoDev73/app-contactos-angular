@@ -1,18 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { ResponseType } from 'src/app/enums/response.enum';
 import { Contact } from 'src/app/models/contact.model';
 import { ContactService } from 'src/app/services/contact.service';
 import { DataStorageService } from 'src/app/services/data-storage.service';
-import { ResponseType } from '../../enums/response.enum';
 
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
-  styleUrls: ['./contact-list.component.scss'],
+  styleUrls: ['./contact-list.component.scss']
 })
 export class ContactListComponent implements OnInit {
+
+
   contactList!: Contact[];
   successMessage = '';
   showMessage: boolean = false;
@@ -69,5 +70,6 @@ export class ContactListComponent implements OnInit {
     this.contactService.statusFormObservableData = true;
     this.router.navigate(['create'], { relativeTo: this.route });
   }
+
 
 }

@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
           localStorage.setItem("expiresAt", expiresAt)
-          this.router.navigate(['admin/contacts']);
+          this.router.navigate(['contacts']);
         } else {
           this.router.navigate(['login']);
         }
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     if (authUser != 'admin' && authPassword != 'admin') {
       this.router.navigate(['login']);
     } else {
-      this.router.navigate(['admin/contacts']);
+      this.router.navigate(['contacts']);
     }
   }
 

@@ -12,27 +12,23 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InterceptorService } from './interceptors/interceptor.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ContactsComponent } from './pages/contacts/contacts.component';
-import { UsersComponent } from './pages/users/users.component';
-import { AboutComponent } from './pages/about/about.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { AuthComponent } from './pages/auth/auth.component';
-import { AdminComponent } from './pages/admin/admin.component';
 import { ContactsModule } from './pages/contacts/contacts.module';
 import { ComponentModule } from './components/component.module';
+import { UserModule } from './pages/user/user.module';
+import { AboutModule } from './pages/about/about.module';
 
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { AuthComponent } from './pages/auth/auth.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ContactsComponent,
-    UsersComponent,
-    AboutComponent,
+    //ContactsComponent,
+    //UsersComponent,
+    //AboutComponent,
     ToolbarComponent,
-    AuthComponent,
-    AdminComponent,
-
+    AuthComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +40,8 @@ import { ComponentModule } from './components/component.module';
     BrowserAnimationsModule,
     NgxSpinnerModule,
     ContactsModule,
+    UserModule,
+    AboutModule,
     ComponentModule,
     ToastrModule.forRoot(),
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })

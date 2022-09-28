@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { Tag } from '../models/tag.model';
 import { Contact } from '../models/contact.model';
-import { Storage } from '../components/enums/storage.enun';
+import { Storage } from '../enums/storage.enun';
+
 
 
 @Injectable({

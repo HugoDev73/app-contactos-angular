@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
-import { ResponseType } from '../../enums/response.enum';
+import { ResponseType } from '../../../enums/response.enum';
 
 @Component({
   selector: 'app-user-list',

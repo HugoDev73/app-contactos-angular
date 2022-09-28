@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { ResponseApi } from '../models/response.model';
 import { SpinnerService } from '../services/spinner.service';
 import { Router } from '@angular/router';
-import { ResponseType } from '../components/enums/response.enum';
+import { ResponseType } from '../enums/response.enum';
 
 @Injectable({
   providedIn: 'root'

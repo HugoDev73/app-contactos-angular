@@ -5,7 +5,7 @@
     </button>
     <a class="navbar-brand" href="#">{{ title }}</a>
     <button type="button" class="btn btn-primary">
-      Contactos <span class="badge bg-danger">{{ (listLocal$ | async)?.length }}</span>
+      Contactos <span class="badge bg-danger"><!-- {{ (listLocal$ | async)?.length }} -->4</span>
     </button>
   </div>
   <ng-template #content let-offcanvas>
@@ -41,25 +41,25 @@
           <a
             class="nav-link"
             routerLinkActive="active"
-            routerLink="/admin/contacts"
+            routerLink="/contacts"
             (click)="offcanvas.close('Save click')"
             >Contactos</a
           >
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a
             class="nav-link"
             routerLinkActive="active"
-            routerLink="/admin/users"
+            routerLink="/users"
             (click)="offcanvas.close('Save click')"
             >Usuarios</a
           >
-        </li>
+        </li> -->
         <li class="nav-item">
           <a
             class="nav-link"
             routerLinkActive="active"
-            routerLink="/admin/about"
+            routerLink="/about"
             (click)="offcanvas.close('Save click')"
             >Acerca de</a
           >

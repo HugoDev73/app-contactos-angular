@@ -73,7 +73,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   onEditProfile(user:User){
-    this.router.navigate(['admin/users/edit']);
+    this.router.navigate(['user/edit']);
     this._userService.userObservableData = user;
     this._userService.statusFormObservableData = false;
     console.log(user);
