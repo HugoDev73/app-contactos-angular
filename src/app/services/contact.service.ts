@@ -11,31 +11,8 @@ import { environment } from 'src/environments/environment';
 })
 export class ContactService {
 
-  contact:Contact = {
-    contactId: 0,
-    contactFirstName: '',
-    contactLastName: '',
-    contactCompany: '',
-    contactBirthday: '',
-    contactNotes: '',
-    contactAlias: '',
-    contactPhoto: '',
-    contactEmails: [],
-    contactTags: [],
-    contactPhones: []
-  }
   stateForm:boolean = true;
-
-  private contatcObservablePrivate: BehaviorSubject<Contact> =  new BehaviorSubject<Contact>(this.contact);
   private statusFormPrivate: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.stateForm);
-
-  get contactObservable(){
-    return this.contatcObservablePrivate.asObservable();
-  }
-  set contactObservableData(data:Contact){
-    this.contatcObservablePrivate.next(data);
-  }
-  
 
   constructor(private http: HttpClient) { }
 

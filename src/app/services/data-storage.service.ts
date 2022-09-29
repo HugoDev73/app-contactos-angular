@@ -13,11 +13,13 @@ export class DataStorageService {
   constructor() {}
 
   private listContactsLocal: Contact[] = [];
-  private listLocal = new BehaviorSubject<Contact[]>([]);
-  listLocal$ = this.listLocal.asObservable();
 
-  private counterContacts: number = Number(localStorage.getItem(Storage.Count))
-  private counter = new BehaviorSubject<number>(this.counterContacts)
+  /* private counterContacts: number = Number(localStorage.getItem(Storage.Count))
+  private counter = new BehaviorSubject<number>(this.counterContacts) */
+
+  count:number = Number(localStorage.getItem(Storage.Count))
+  private totalContacts = new BehaviorSubject<number>(this.count);
+  public cambiaNumObs$ = this.totalContacts.asObservable();
 
 
 
@@ -44,17 +46,19 @@ export class DataStorageService {
   addContactLocal(contact: Contact) {
     this.listContactsLocal.push(contact)
     localStorage.setItem(Storage.Contacts, JSON.stringify(this.listContactsLocal));
-    this.listLocal.next(this.listContactsLocal)
   }
 
   increaseCounter(){
-    const counter = Number(localStorage.getItem(Storage.Count))
-    localStorage.setItem(Storage.Count, ( counter+1).toString() )
+    /* const counter = Number(localStorage.getItem(Storage.Count)) */
+    const n = this.totalContacts.getValue()+1
+    this.totalContacts.next(n)
+    localStorage.setItem(Storage.Count, (n).toString() )
   }
 
   decreaseCounter(){
-    const counter = Number(localStorage.getItem(Storage.Count))
-    localStorage.setItem(Storage.Count, ( counter-1).toString() )
+    const n = this.totalContacts.getValue()-1
+    this.totalContacts.next(n)
+    localStorage.setItem(Storage.Count, (n).toString() )
   }
 
 

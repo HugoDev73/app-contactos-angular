@@ -10,7 +10,7 @@
   
       <div class="mt-3">
           <p>Emails</p>
-        <ul class="list-group emails" *ngFor="let email of emails">
+        <ul class="list-group emails" *ngFor="let email of listEmails">
           <li class="list-group-item">{{ email.emailValue }}</li>
         </ul>
       </div>
@@ -24,7 +24,7 @@
   
       <div class="mt-3">
           <p>Phones</p>
-        <ul class="list-group phones" *ngFor="let phone of phones">
+        <ul class="list-group phones" *ngFor="let phone of listPhones">
           <li class="list-group-item">
             {{ phone.phoneType }} --- {{ phone.phoneValue }}
           </li>

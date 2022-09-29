@@ -25,7 +25,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MovilComponent,
     HomeComponent,
     WhatsappComponent,
-    EmailComponent,
+    EmailComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +37,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     LoginComponent,
     UserListComponent,
     UserDetailComponent,
-    UserFormComponent
+    UserFormComponent,
   ]
 })
 export class ComponentModule { }

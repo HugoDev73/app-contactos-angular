@@ -23,8 +23,8 @@ import { DynamicEmailDirective } from 'src/app/directives/dynamic-email.directiv
     DynamicEmailDirective,
   ],
   imports: [
-    RouterModule,
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     ContactsRoutingModule,
     NgbModule,

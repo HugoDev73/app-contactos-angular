@@ -16,6 +16,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   title:string = "Agenda";
   closeResult = '';
   user!:User;
+  total = 0;
+  imageDefault = 'https://cdn3.iconfinder.com/data/icons/avatars-round-flat/33/man5-512.png'
  
   constructor(private router: Router,
     private route: ActivatedRoute, 
@@ -24,7 +26,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _dataStorage: DataStorageService) { }
 
-    listLocal$ = this._dataStorage.listLocal$;
+    totalContacts = this._dataStorage.cambiaNumObs$.subscribe(data => this.total = data)
 
   ngOnInit(): void {
     this.onGetUser(12);
@@ -34,7 +36,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   onGetUser(id:number){
     this._userService.getUser(id).subscribe( data => {
      this.user = data.result.user;
-      console.log(data.result.user)
     })
   }
 
@@ -73,10 +74,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   onEditProfile(user:User){
-    this.router.navigate(['user/edit']);
-    this._userService.userObservableData = user;
+    this.router.navigate(['user/edit'], { state:{user: user} });
     this._userService.statusFormObservableData = false;
-    console.log(user);
   }
 
 

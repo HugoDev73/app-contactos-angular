@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserRoutingModule } from './user-routing.module';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UsersComponent } from './users.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 @NgModule({
@@ -18,9 +19,9 @@ import { UsersComponent } from './users.component';
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    UserRoutingModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    UserRoutingModule
   ]
 })
 export class UserModule { }

@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
@@ -11,7 +15,6 @@ import { EmailComponent } from 'src/app/components/dinamic/email/email.component
 import { HomeComponent } from 'src/app/components/dinamic/phones/home/home.component';
 import { MovilComponent } from 'src/app/components/dinamic/phones/movil/movil.component';
 import { WhatsappComponent } from 'src/app/components/dinamic/phones/whatsapp/whatsapp.component';
-
 
 import { ResponseType } from 'src/app/enums/response.enum';
 import { Contact } from 'src/app/models/contact.model';
@@ -25,10 +28,9 @@ import { DataStorageService } from 'src/app/services/data-storage.service';
 @Component({
   selector: 'app-contact-create-edit',
   templateUrl: './contact-create-edit.component.html',
-  styleUrls: ['./contact-create-edit.component.scss']
+  styleUrls: ['./contact-create-edit.component.scss'],
 })
 export class ContactCreateEditComponent implements OnInit {
-
   data$!: Observable<Contact>;
   isCreate: boolean = true;
 
@@ -57,12 +59,9 @@ export class ContactCreateEditComponent implements OnInit {
     private _contactService: ContactService,
     private router: Router,
     private _dataStorage: DataStorageService,
-    private fb:FormBuilder
-
+    private fb: FormBuilder
   ) {
-    this.contact = history.state;
-    console.log(this.contact);
-    
+
   }
 
   ngOnInit(): void {
@@ -77,7 +76,7 @@ export class ContactCreateEditComponent implements OnInit {
   }
 
   onGetTags() {
-    this.listTags = this._dataStorage.tags
+    this.listTags = this._dataStorage.tags;
     //this._dataStorage.getTags().subscribe((data) => (this.listTags = data));
   }
 
@@ -94,44 +93,39 @@ export class ContactCreateEditComponent implements OnInit {
   }
 
   getContactData() {
-    this._contactService.contactObservable.subscribe((response: Contact) => {
-      this.contact = response;
-      this.listEmails = response.contactEmails;
-      this.tags = response.contactTags;
-      this.listPhones = response.contactPhones;
-    });
+    this.contact = history.state.contact;
+    this.listEmails = this.contact.contactEmails;
+    this.tags = this.contact.contactTags;
+    this.listPhones = this.contact.contactPhones;
   }
 
-  createFormContact(contact?: Contact) {
-    /* this.formContact = this.fb.group({
-      contactId: [!this.contact ? null : this.contact.contactId, Validators.required]
-    }) */
-    this.formContact = new FormGroup({
-      contactId: new FormControl(!this.contact ? null : this.contact.contactId),
-      contactFirstName: new FormControl(
-        !this.contact ? null : this.contact.contactFirstName!,
-        Validators.required
-      ),
-      contactLastName: new FormControl(
-        !this.contact ? null : this.contact.contactLastName!,
-        Validators.required
-      ),
-      contactCompany: new FormControl(
-        !this.contact ? null : this.contact.contactCompany!,
-        Validators.required
-      ),
-      contactBirthday: new FormControl(
-        !this.contact ? null : this.contact.contactBirthday!,
-        [Validators.required]
-      ),
-      contactNotes: new FormControl(
-        !this.contact ? null : this.contact.contactNotes!,
-        Validators.required
-      ),
-      contactAlias: new FormControl(
-        !this.contact ? null : this.contact.contactAlias!,
-        Validators.required
-      ),
+  createFormContact(contact?:Contact) {
+    this.formContact = this.fb.group({
+      contactId: [!contact ? null : contact.contactId],
+      contactFirstName: [
+        !contact ? null : this.contact.contactFirstName!,
+        Validators.required,
+      ],
+      contactLastName: [
+        !contact ? null : contact.contactLastName!,
+        Validators.required,
+      ],
+      contactCompany: [
+        !contact ? null : contact.contactCompany!,
+        Validators.required,
+      ],
+      contactBirthday: [
+        !contact ? null : contact.contactBirthday!,
+        Validators.required,
+      ],
+      contactNotes: [
+        !contact ? null : contact.contactNotes!,
+        Validators.required,
+      ],
+      contactAlias: [
+        !contact ? null : contact.contactAlias!,
+        Validators.required,
+      ],
     });
   }
 
@@ -189,12 +183,12 @@ export class ContactCreateEditComponent implements OnInit {
   Logica Tags  
   */
   tagExists(value: string, tags: Tag[]): boolean {
-    const index = tags.findIndex(it => it.tagValue == value);
-    if(index >= 0){
+    const index = tags.findIndex((it) => it.tagValue == value);
+    if (index >= 0) {
       this.errorMessage(`Ya existe "${value}": Ingrese uno diferente`);
       return true;
     }
-   /*  for (var i = 0; i < tags.length; i++) {
+    /*  for (var i = 0; i < tags.length; i++) {
       if (tags[i].tagValue == value) {
         this.errorMessage(`Ya existe "${value}": Ingrese uno diferente`);
         return true;
@@ -306,6 +300,7 @@ export class ContactCreateEditComponent implements OnInit {
     this.listContactsLocal = this.listContactsLocal || [];
     this._contactService.createContact(contactItem).subscribe((data) => {
       if (data.statusCode == ResponseType.Ok) {
+        this._dataStorage.increaseCounter();
         this.listContactsLocal.push(contactItem);
         this._dataStorage.addContactLocal(contactItem);
       }
@@ -329,7 +324,6 @@ export class ContactCreateEditComponent implements OnInit {
     if (this.formContact.valid) {
       if (this.isCreate) {
         this.saveContact();
-        this._dataStorage.increaseCounter();
       } else {
         this.updateContact();
       }
@@ -353,5 +347,4 @@ export class ContactCreateEditComponent implements OnInit {
       };
     }
   }
-
 }

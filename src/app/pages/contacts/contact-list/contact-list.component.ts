@@ -49,13 +49,11 @@ export class ContactListComponent implements OnInit {
 
   onEditContact(contact: Contact) {
     this.router.navigate(['edit'], { relativeTo: this.route, state:{contact: contact} });
-    this.contactService.contactObservableData = contact;
     this.contactService.statusFormObservableData = false;
   }
 
   onDetailContact(contact: Contact) {
-    this.router.navigate(['detail'], { relativeTo: this.route });
-    this.contactService.contactObservableData = contact;
+    this.router.navigate(['detail'], { relativeTo: this.route, state:{contact: contact} });
   }
 
   onDeleteContact(id: number) {

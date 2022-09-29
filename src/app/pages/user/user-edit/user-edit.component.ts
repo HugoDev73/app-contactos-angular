@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/models/user.model';
@@ -15,12 +15,12 @@ export class UserEditComponent implements OnInit {
   data$!: Observable<User>;
   user!: User;
   usersLocal: User[] = [];
-  createUser!: FormGroup;
+  formUser!: FormGroup;
   isCreate:boolean = true;
   urlImage = ""
 
 
-  constructor(private _userService: UserService, private router:Router) { }
+  constructor(private _userService: UserService, private router:Router, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getStatusForm();
@@ -31,38 +31,52 @@ export class UserEditComponent implements OnInit {
     this._userService.statusFormObservable.subscribe(data => this.isCreate = data)
   }
 
+  getUserData(){
+    this.user = history.state.user
+  }
+
+  createFormUser(user?:User) {
+    this.formUser = this.fb.group({
+      userId: [!user ? null : user.userId],
+      userFullName: [
+        !user ? null : this.user.userFullName!,
+        Validators.required,
+      ],
+      userName: [
+        !user ? null : user.userName!,
+        Validators.required,
+      ],
+      userPassword: [
+        !user ? null : user.userPassword!,
+        Validators.required,
+      ],
+      userEmail: [
+        !user ? null : user.userEmail!,
+        Validators.required,
+      ],
+      userPhoto: [
+        !user ? null : user.userPhoto!,
+        Validators.required,
+      ]
+    });
+  }
   onCreateForm() {
     if(this.isCreate){
-      this.createUser = new FormGroup({
-        'userId': new FormControl(15, Validators.required),
-        'userFullName': new FormControl(null, Validators.required),
-        'userName': new FormControl(null, Validators.required),
-        'userPassword': new FormControl(null, Validators.required),
-        'userEmail': new FormControl(null, Validators.required),
-        'userPhoto': new FormControl(null, Validators.required)
-      });
+     this.createFormUser();
     }else{
-      this._userService.userObservable.subscribe((response:User) => {
-        this.user = response;
-      })
-      this.createUser = new FormGroup({
-        'userId': new FormControl(this.user.userId, Validators.required),
-        'userFullName': new FormControl(this.user.userFullName, Validators.required),
-        'userName': new FormControl(this.user.userName, Validators.required),
-        'userPassword': new FormControl(this.user.userPassword, Validators.required),
-        'userEmail': new FormControl(this.user.userEmail, Validators.required),
-        'userPhoto': new FormControl(this.user.userPhoto, Validators.required),
-      });
+      this.getUserData();
+      this.createFormUser(this.user);
+
     }
     
   }
 
   onSubmit() {
-    const user:User = this.createUser.value;
+    const user:User = this.formUser.value;
     user.userPhoto = this.urlImage;
     console.log(user);
     
-    if (this.createUser.valid) {
+    if (this.formUser.valid) {
       if(this.isCreate){
         this._userService.createUser(user).subscribe(data => {
           console.log(data)

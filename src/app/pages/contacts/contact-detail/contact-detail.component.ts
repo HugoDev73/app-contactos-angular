@@ -15,24 +15,22 @@ export class ContactDetailComponent implements OnInit {
 
   data$!:Observable<Contact>;
   contact!:Contact;
-  emails!:Email[];
-  phones!:Phone[];
+  listEmails!:Email[];
+  listPhones!:Phone[];
   tags!:Tag[];
 
   constructor(private contactService: ContactService) { }
 
   ngOnInit(): void {
-    this.onGetContacto();
+    this.getContactData();
   }
 
-  onGetContacto(){
-    this.contactService.contactObservable.subscribe((response:Contact) => {
-      this.contact = response;
-      this.emails = response.contactEmails;
-      this.phones = response.contactPhones;
-      this.tags = response.contactTags;
-    })
-  }
 
+  getContactData() {
+    this.contact = history.state.contact;
+    this.listEmails = this.contact.contactEmails;
+    this.tags = this.contact.contactTags;
+    this.listPhones = this.contact.contactPhones;
+  }
 
 }

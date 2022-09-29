@@ -18,17 +18,13 @@ import { UserModule } from './pages/user/user.module';
 import { AboutModule } from './pages/about/about.module';
 
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { AuthComponent } from './pages/auth/auth.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    //ContactsComponent,
-    //UsersComponent,
-    //AboutComponent,
-    ToolbarComponent,
-    AuthComponent
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
