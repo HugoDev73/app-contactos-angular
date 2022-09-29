@@ -6,8 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { UserRoutingModule } from './user-routing.module';
 import { UserEditComponent } from './user-edit/user-edit.component';
-import { UsersComponent } from './users.component';
-import { BrowserModule } from '@angular/platform-browser';
+import { UsersComponent } from './user/users.component';
 
 
 @NgModule({

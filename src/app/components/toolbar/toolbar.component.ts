@@ -2,6 +2,7 @@ import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {NgbOffcanvas, OffcanvasDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { ResponseType } from 'src/app/enums/response.enum';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataStorageService } from 'src/app/services/data-storage.service';
@@ -32,6 +33,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.onGetUser(12);
   }
  
+  menuOptions = [
+    {name: 'contactos', route: '/contacts'},
+    {name: 'about', route: '/about'}
+  ]
 
   onGetUser(id:number){
     this._userService.getUser(id).subscribe( data => {
@@ -58,18 +63,20 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   logout(){
-    this._authService.logout().subscribe(() => {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      this.router.navigate(['login']);
+    this._authService.logout().subscribe((data) => {
+      if(data.statusCode === ResponseType.Ok){
+        this._dataStorage.removeInformationAuth();
+        this.router.navigate(['login']);
+      }
     })
   }
 
   refreshToken(){
     this._authService.refreshToken().subscribe((data) => {
-      const {accessToken, refreshToken} = data.result
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      if (data.statusCode === ResponseType.Ok) {
+        const {accessToken, refreshToken, expiresAt} = data.result
+        this._dataStorage.setInformationAuth(accessToken,refreshToken, expiresAt);
+      }
     })
   }
 

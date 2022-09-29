@@ -36,26 +36,19 @@
         </ul>
       </div>
 
-      <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 mt-5 bg-light">
-        <li class="nav-item">
+      <ul  class="navbar-nav justify-content-end flex-grow-1 mt-5 bg-light mb-3">
+
+        <ul class="nav-item" *ngFor="let item of menuOptions">
           <a
             class="nav-link"
             routerLinkActive="active"
-            routerLink="/contacts"
+            [routerLink]="item.route"
             (click)="offcanvas.close('Save click')"
-            >Contactos</a
+            >{{item.name}}</a
           >
-        </li>
-        <!-- <li class="nav-item">
-          <a
-            class="nav-link"
-            routerLinkActive="active"
-            routerLink="/users"
-            (click)="offcanvas.close('Save click')"
-            >Usuarios</a
-          >
-        </li> -->
-        <li class="nav-item">
+        </ul>
+
+       <!--  <li class="nav-item">
           <a
             class="nav-link"
             routerLinkActive="active"
@@ -63,7 +56,8 @@
             (click)="offcanvas.close('Save click')"
             >Acerca de</a
           >
-        </li>
+        </li> -->
+
       </ul>
 	  <div class="logout mb-3">
 		<button class="btn btn-success" (click)="logout()" (click)="offcanvas.close('Save click')">Logout</button>

@@ -8,6 +8,7 @@ import { ResponseApi } from '../models/response.model';
 import { SpinnerService } from '../services/spinner.service';
 import { Router } from '@angular/router';
 import { ResponseType } from '../enums/response.enum';
+import { Auth } from '../enums/auth.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(private toastr: ToastrService, private _spinnerService: SpinnerService, private router:Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const Authorization = localStorage.getItem("accessToken");
+    const Authorization = localStorage.getItem(Auth.accessToken);
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${Authorization}`,
       'X-API-Key': environment.apiKey
@@ -42,7 +43,7 @@ export class InterceptorService implements HttpInterceptor {
               break;
             case ResponseType.Unauthorized:
               this.errorMessage(message);
-              //this.router.navigate(['login']);
+              this.router.navigate(['login']);
               break;
             default:
             // code block

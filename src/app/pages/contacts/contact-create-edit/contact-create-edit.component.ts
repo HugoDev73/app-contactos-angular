@@ -48,7 +48,7 @@ export class ContactCreateEditComponent implements OnInit {
 
   formContact!: FormGroup;
   urlImage: string = '';
-
+  url:string = this.router.url;
   isCreatePhone: boolean = true;
 
   @ViewChild(DynamicPhoneDirective) dynamic!: DynamicPhoneDirective;
@@ -68,7 +68,8 @@ export class ContactCreateEditComponent implements OnInit {
     this.getStatusForm();
     this.onCreateForm();
     this.onGetTags();
-    this.onGetContactsLocal();
+    //this.onGetContactsLocal();
+    //this.getContactData();
   }
 
   errorMessage(message: any) {
@@ -80,20 +81,29 @@ export class ContactCreateEditComponent implements OnInit {
     //this._dataStorage.getTags().subscribe((data) => (this.listTags = data));
   }
 
-  onGetContactsLocal() {
+  /* onGetContactsLocal() {
     this._dataStorage
       .getContactsLocal()
       .subscribe((data) => (this.listContactsLocal = data));
-  }
+  } */
 
   getStatusForm() {
-    this._contactService.statusFormObservable.subscribe(
+    if (this.url === '/contacts/create') {
+      this.isCreate = true;
+    }else{
+      this.isCreate = false
+    }
+    /* this._contactService.statusFormObservable.subscribe(
       (data) => (this.isCreate = data)
-    );
+    ); */
   }
 
   getContactData() {
-    this.contact = history.state.contact;
+    if(!history.state.contact){
+      this.contact = this._dataStorage.getContactEditDetail();
+    }else if(history.state.contact){
+      this.contact = history.state.contact;
+    } 
     this.listEmails = this.contact.contactEmails;
     this.tags = this.contact.contactTags;
     this.listPhones = this.contact.contactPhones;
@@ -103,7 +113,7 @@ export class ContactCreateEditComponent implements OnInit {
     this.formContact = this.fb.group({
       contactId: [!contact ? null : contact.contactId],
       contactFirstName: [
-        !contact ? null : this.contact.contactFirstName!,
+        !contact ? null : contact.contactFirstName!,
         Validators.required,
       ],
       contactLastName: [
@@ -128,7 +138,8 @@ export class ContactCreateEditComponent implements OnInit {
       ],
     });
   }
-
+  
+  
   onCreateForm() {
     if (this.isCreate) {
       this.createFormContact();

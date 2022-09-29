@@ -8,8 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ContactDetailComponent } from './contact-detail/contact-detail.component';
 import { ContactCreateEditComponent } from './contact-create-edit/contact-create-edit.component';
-import { ContactListComponent } from './contact-list/contact-list.component';
-import { ContactsComponent } from './contacts.component';
+import { ContactsComponent } from './contacts/contacts.component';
 import { DynamicPhoneDirective } from 'src/app/directives/dynamic-phone.directive';
 import { DynamicEmailDirective } from 'src/app/directives/dynamic-email.directive';
 
@@ -18,7 +17,6 @@ import { DynamicEmailDirective } from 'src/app/directives/dynamic-email.directiv
     ContactsComponent,
     ContactDetailComponent,
     ContactCreateEditComponent,
-    ContactListComponent,
     DynamicPhoneDirective,
     DynamicEmailDirective,
   ],

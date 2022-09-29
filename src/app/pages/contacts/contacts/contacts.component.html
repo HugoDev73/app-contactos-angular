@@ -53,9 +53,9 @@
 </div>
   <div class="d-flex justify-content-between p-2">
     <ngb-pagination
-      [collectionSize]="195"
+      [collectionSize]="collectionSize"
       [(page)]="page"
-      [pageSize]="10"
+      [pageSize]="limit"
       (pageChange)="onShowContacts()"
     >
     </ngb-pagination>

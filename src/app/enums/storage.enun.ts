@@ -1,5 +1,6 @@
 export enum Storage {
     Tags = 'tags',
     Contacts = 'contacts',
-    Count = 'count'
+    Count = 'count',
+    ContactEditDetail = 'contactEditDetail'
   }

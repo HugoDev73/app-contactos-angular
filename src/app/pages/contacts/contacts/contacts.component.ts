@@ -47,11 +47,13 @@ export class ContactsComponent implements OnInit {
   }
 
   onEditContact(contact: Contact) {
+    this._dataStorage.addContactEditDetail(contact);
     this.router.navigate(['edit'], { relativeTo: this.route, state:{contact: contact} });
     this.contactService.statusFormObservableData = false;
   }
 
   onDetailContact(contact: Contact) {
+    this._dataStorage.addContactEditDetail(contact);
     this.router.navigate(['detail'], { relativeTo: this.route, state:{contact: contact} });
   }
 
@@ -65,6 +67,7 @@ export class ContactsComponent implements OnInit {
 
   onNewContact() {
     this.contactService.statusFormObservableData = true;
+    this._dataStorage.removeContactEditDetail();
     this.router.navigate(['create'], { relativeTo: this.route });
   }
 

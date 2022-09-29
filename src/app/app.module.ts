@@ -17,14 +17,11 @@ import { ComponentModule } from './components/component.module';
 import { UserModule } from './pages/user/user.module';
 import { AboutModule } from './pages/about/about.module';
 
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent
   ],
   imports: [
     BrowserModule,
